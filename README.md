@@ -43,7 +43,8 @@ ros2 run mp3_player mp3_player_node --ros-args -p topic:=/my_audio_topic
 ### Publish a message to trigger playback
 
 ```bash
-ros2 topic pub --once /play_audio std_msgs/String "data: '/absolute/path/to/file.mp3'"
+ros2 topic pub --once /play_audio std_msgs/String "data: '/relate/path/from/sounds/dir.mp3'"
+ros2 topic pub --once /play_audio std_msgs/msg/String "data: 'ijou_hassei.mp3'"
 ```
 
 ## Behavior

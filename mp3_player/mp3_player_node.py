@@ -6,6 +6,7 @@ import subprocess
 import threading
 
 import rclpy
+from ament_index_python.packages import get_package_share_directory
 from rclpy.node import Node
 from std_msgs.msg import String
 
@@ -23,12 +24,19 @@ class Mp3PlayerNode(Node):
         self.create_subscription(String, topic, self._on_play, 10)
         self.get_logger().info(f"Listening on topic: {topic}")
 
+        self._sounds_dir = os.path.join(
+            get_package_share_directory('mp3_player'), 'sounds'
+        )
+
     def _on_play(self, msg: String) -> None:
         path = msg.data.strip()
 
         if not path.lower().endswith('.mp3'):
             self.get_logger().warn(f"File is not an .mp3: {path}")
             return
+
+        if not os.path.isabs(path):
+            path = os.path.join(self._sounds_dir, path)
 
         if not os.path.isfile(path):
             self.get_logger().warn(f"File not found: {path}")
