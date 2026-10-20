@@ -64,7 +64,7 @@ colcon test --packages-select mp3_player
 colcon test-result --verbose
 ```
 
-Linting uses `ruff` instead of `ament_flake8`: `uvx ruff check . && uvx ruff format --check .`
+Linting uses `ruff` (configured in `ruff.toml`) instead of `ament_flake8`: `uvx ruff check . && uvx ruff format --check .`
 
 ### Bundled sounds
 

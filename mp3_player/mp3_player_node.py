@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """ROS2 node that plays an MP3 file when a message is received on /play_audio."""
 
 import os
@@ -13,10 +12,10 @@ from std_msgs.msg import String
 
 class Mp3PlayerNode(Node):
     def __init__(self):
-        super().__init__('mp3_player_node')
+        super().__init__("mp3_player_node")
 
-        self.declare_parameter('topic', '/play_audio')
-        topic = self.get_parameter('topic').get_parameter_value().string_value
+        self.declare_parameter("topic", "/play_audio")
+        topic = self.get_parameter("topic").get_parameter_value().string_value
 
         self._process: subprocess.Popen | None = None
         self._lock = threading.Lock()
@@ -25,13 +24,13 @@ class Mp3PlayerNode(Node):
         self.get_logger().info(f"Listening on topic: {topic}")
 
         self._sounds_dir = os.path.join(
-            get_package_share_directory('mp3_player'), 'sounds'
+            get_package_share_directory("mp3_player"), "sounds"
         )
 
     def _on_play(self, msg: String) -> None:
         path = msg.data.strip()
 
-        if not path.lower().endswith('.mp3'):
+        if not path.lower().endswith(".mp3"):
             self.get_logger().warn(f"File is not an .mp3: {path}")
             return
 
@@ -46,7 +45,7 @@ class Mp3PlayerNode(Node):
             self._stop_current()
             self.get_logger().info(f"Playing: {path}")
             self._process = subprocess.Popen(
-                ['mpg123', '-q', path],
+                ["mpg123", "-q", path],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
@@ -78,5 +77,5 @@ def main(args=None):
         rclpy.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
