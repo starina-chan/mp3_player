@@ -37,25 +37,28 @@ Play a bundled clip:
 ros2 topic pub --once /play_audio std_msgs/msg/String "data: 'ijou_hassei.mp3'"
 ```
 
+Listen on a different topic by remapping `play_audio`:
+
+```bash
+ros2 launch mp3_player mp3_player.launch.py topic:=alerts/sound
+ros2 run mp3_player mp3_player_node --ros-args -r play_audio:=alerts/sound
+```
+
 ## Docs
 
 ### Launch arguments
 
 | Argument | Default | Description |
 | --- | --- | --- |
-| `topic` | `/play_audio` | Topic to subscribe to for playback requests |
-
-### Parameters
-
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `topic` | `/play_audio` | Topic to subscribe to for playback requests |
+| `topic` | `play_audio` | Topic that `play_audio` is remapped to |
 
 ### Subscribed topics
 
 | Topic | Type | Description |
 | --- | --- | --- |
-| `/play_audio` | `std_msgs/msg/String` | Absolute path, or path relative to `sounds/`, of the `.mp3` to play |
+| `play_audio` | `std_msgs/msg/String` | Absolute path, or path relative to `sounds/`, of the `.mp3` to play |
+
+The topic name is relative, so it follows the node's namespace.
 
 ### Tests
 

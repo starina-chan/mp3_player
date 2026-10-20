@@ -13,20 +13,20 @@ MP3_EXTENSION = ".mp3"
 PLAYER_COMMAND = ["mpg123", "-q"]
 STOP_TIMEOUT_SECONDS = 2.0
 QUEUE_DEPTH = 10
+PLAY_TOPIC = "play_audio"
 
 
 class Mp3PlayerNode(Node):
     def __init__(self):
         super().__init__("mp3_player_node")
 
-        self.declare_parameter("topic", "/play_audio")
-        topic = self.get_parameter("topic").get_parameter_value().string_value
-
         self._process: subprocess.Popen | None = None
         self._lock = threading.Lock()
 
-        self.create_subscription(String, topic, self._on_play, QUEUE_DEPTH)
-        self.get_logger().info(f"Listening on topic: {topic}")
+        subscription = self.create_subscription(
+            String, PLAY_TOPIC, self._on_play, QUEUE_DEPTH
+        )
+        self.get_logger().info(f"Listening on topic: {subscription.topic_name}")
 
         self._sounds_directory = os.path.join(
             get_package_share_directory(PACKAGE_NAME), SOUNDS_DIRECTORY
