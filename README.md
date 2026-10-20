@@ -1,63 +1,65 @@
-# mp3_player — ROS2 MP3 Player Node
+# mp3_player
 
-A ROS2 Python node that plays an `.mp3` file whenever a message is published to a topic. A new message interrupts any currently playing audio.
+A ROS 2 node that plays a sound clip when you send it the clip's file name.
 
-## Requirements
+`mp3_player` is an `ament_python` package for ROS 2 Humble. The node listens on a `std_msgs/String` topic and plays each received `.mp3` with `mpg123` in a subprocess, so playback never blocks the ROS executor.
 
-- ROS2 (Humble or later)
-- `mpg123` audio player
+## Installation
+
+Install `mpg123`, then build the package in your workspace:
 
 ```bash
 sudo apt install mpg123
-```
-
-## Build
-
-```bash
 cd <your_ws>
 colcon build --packages-select mp3_player
 source install/setup.bash
 ```
 
+## Features
+
+- Plays an `.mp3` file when its path is published to a topic
+- Resolves relative paths against the bundled `sounds/` directory
+- Interrupts the current clip when a new one arrives
+- Skips non-`.mp3` and missing files with a warning
+- Stops playback cleanly on shutdown
+
 ## Usage
 
-### Launch (recommended)
+Start the node:
 
 ```bash
 ros2 launch mp3_player mp3_player.launch.py
 ```
 
-With a custom topic:
+Play a bundled clip:
 
 ```bash
-ros2 launch mp3_player mp3_player.launch.py topic:=/my_audio_topic
-```
-
-### Run the node directly
-
-```bash
-ros2 run mp3_player mp3_player_node
-ros2 run mp3_player mp3_player_node --ros-args -p topic:=/my_audio_topic
-```
-
-### Publish a message to trigger playback
-
-```bash
-ros2 topic pub --once /play_audio std_msgs/String "data: '/relate/path/from/sounds/dir.mp3'"
 ros2 topic pub --once /play_audio std_msgs/msg/String "data: 'ijou_hassei.mp3'"
 ```
 
-## Behavior
+## Docs
 
-| Situation | Result |
-|---|---|
-| Valid `.mp3` path received | Stops current audio (if any), plays new file |
-| Path does not exist | Warning logged, playback skipped |
-| File is not `.mp3` | Warning logged, playback skipped |
-| Node shuts down | Current playback is stopped cleanly |
+### Launch arguments
 
-## Parameters
+| Argument | Default | Description |
+| --- | --- | --- |
+| `topic` | `/play_audio` | Topic to subscribe to for playback requests |
+
+### Parameters
 
 | Parameter | Default | Description |
-|---|---|---|
-| `topic` | `/play_audio` | ROS2 topic to subscribe to |
+| --- | --- | --- |
+| `topic` | `/play_audio` | Topic to subscribe to for playback requests |
+
+### Subscribed topics
+
+| Topic | Type | Description |
+| --- | --- | --- |
+| `/play_audio` | `std_msgs/msg/String` | Absolute path, or path relative to `sounds/`, of the `.mp3` to play |
+
+### Bundled sounds
+
+- `ijou.mp3`
+- `ijou_hassei.mp3`
+- `keikoku.mp3`
+- `seijou.mp3`
