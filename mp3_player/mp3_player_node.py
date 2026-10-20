@@ -1,5 +1,7 @@
 import os
+import shutil
 import subprocess
+import sys
 import threading
 
 import rclpy
@@ -8,9 +10,11 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 PACKAGE_NAME = "mp3_player"
+NODE_NAME = "mp3_player_node"
 SOUNDS_DIRECTORY = "sounds"
 MP3_EXTENSION = ".mp3"
-PLAYER_COMMAND = ["mpg123", "-q"]
+PLAYER_EXECUTABLE = "mpg123"
+PLAYER_COMMAND = [PLAYER_EXECUTABLE, "-q"]
 STOP_TIMEOUT_SECONDS = 2.0
 QUEUE_DEPTH = 10
 PLAY_TOPIC = "play_audio"
@@ -18,7 +22,7 @@ PLAY_TOPIC = "play_audio"
 
 class Mp3PlayerNode(Node):
     def __init__(self):
-        super().__init__("mp3_player_node")
+        super().__init__(NODE_NAME)
 
         self._process: subprocess.Popen | None = None
         self._lock = threading.Lock()
@@ -81,6 +85,13 @@ class Mp3PlayerNode(Node):
 
 
 def main(args=None):
+    if shutil.which(PLAYER_EXECUTABLE) is None:
+        rclpy.logging.get_logger(NODE_NAME).fatal(
+            f"{PLAYER_EXECUTABLE} not found. Install it with: "
+            "rosdep install --from-paths src --ignore-src -y"
+        )
+        sys.exit(1)
+
     rclpy.init(args=args)
     node = Mp3PlayerNode()
     try:

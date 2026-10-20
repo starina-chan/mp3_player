@@ -22,6 +22,7 @@ source install/setup.bash
 - Interrupts the current clip when a new one arrives
 - Skips non-`.mp3` and missing files with a warning
 - Stops playback cleanly on shutdown
+- Exits at startup with an error if `mpg123` isn't installed
 
 ## Usage
 
