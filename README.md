@@ -6,11 +6,11 @@ A ROS 2 node that plays a sound clip when you send it the clip's file name.
 
 ## Installation
 
-Install `mpg123`, then build the package in your workspace:
+Install the dependencies (including `mpg123`) with rosdep, then build the package in your workspace:
 
 ```bash
-sudo apt install mpg123
 cd <your_ws>
+rosdep install --from-paths src --ignore-src -y
 colcon build --packages-select mp3_player
 source install/setup.bash
 ```
