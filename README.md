@@ -44,12 +44,20 @@ ros2 launch mp3_player mp3_player.launch.py topic:=alerts/sound
 ros2 run mp3_player mp3_player_node --ros-args -r play_audio:=alerts/sound
 ```
 
+Run it under a namespace, so it listens on `/robot1/play_audio`:
+
+```bash
+ros2 launch mp3_player mp3_player.launch.py namespace:=robot1
+```
+
 ## Docs
 
 ### Launch arguments
 
 | Argument | Default | Description |
 | --- | --- | --- |
+| `use_sim_time` | `false` | Use the simulation clock |
+| `namespace` | `""` | Namespace for the node and its topic |
 | `topic` | `play_audio` | Topic that `play_audio` is remapped to |
 
 ### Subscribed topics
