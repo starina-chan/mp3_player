@@ -57,6 +57,15 @@ ros2 topic pub --once /play_audio std_msgs/msg/String "data: 'ijou_hassei.mp3'"
 | --- | --- | --- |
 | `/play_audio` | `std_msgs/msg/String` | Absolute path, or path relative to `sounds/`, of the `.mp3` to play |
 
+### Tests
+
+```bash
+colcon test --packages-select mp3_player
+colcon test-result --verbose
+```
+
+Linting uses `ruff` instead of `ament_flake8`: `uvx ruff check . && uvx ruff format --check .`
+
 ### Bundled sounds
 
 - `ijou.mp3`

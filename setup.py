@@ -16,10 +16,15 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='todo',
-    maintainer_email='todo@example.com',
+    maintainer='starina-chan',
+    maintainer_email='154484150+starina-chan@users.noreply.github.com',
     description='ROS2 node that plays an MP3 file on a topic message.',
     license='Apache-2.0',
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'console_scripts': [
             'mp3_player_node = mp3_player.mp3_player_node:main',
